@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مريومتي ❤️</title>
+<title>مريومة ❤️</title>
 <style>
 body{
     font-family: Arial;
@@ -13,14 +13,13 @@ body{
     transition: background 1s ease;
     margin:0;
     padding:0;
-    overflow-x:hidden;
+    overflow-x: hidden;
 }
 .page{
     display:none;
     padding:40px 10px;
     box-sizing: border-box;
 }
-
 input,button{
     padding:10px;
     font-size:18px;
@@ -39,33 +38,21 @@ button#nextBtn{
     font-size:20px;
     animation: pulseBtn 2s infinite alternate;
 }
-
 @keyframes pulseBtn{
     0%{transform: scale(1);}
     50%{transform: scale(1.1);}
     100%{transform: scale(1);}
 }
 
-/* القلوب المتساقطة محسّنة */
-.heart-fall{
-    position: fixed;
-    top: -50px;
-    pointer-events:none;
-    animation: fall linear infinite;
-    opacity:0.7;
-    user-select:none;
-}
-@keyframes fall{
-    0%{transform: translateY(0) rotate(0deg);}
-    100%{transform: translateY(100vh) rotate(360deg);}
-}
-
 /* الموسيقى */
 .music-container{
     display:flex;
     justify-content:center;
-    gap:30px;
+    gap:20px;
     flex-wrap:wrap;
+    opacity:0;
+    transform: translateY(50px);
+    transition: all 1s ease;
 }
 .song{
     width:200px;
@@ -73,9 +60,8 @@ button#nextBtn{
     cursor:pointer;
     transition:0.3s;
     position: relative;
-    opacity:1;
-    transform: translateY(0);
-    margin-bottom:20px;
+    opacity:0;
+    transform: translateY(30px);
 }
 .song img{
     width:100%;
@@ -87,7 +73,7 @@ button#nextBtn{
 .song.active img{
     transform: scale(1.05);
     border-color:#ff2d55;
-    box-shadow:0 0 30px #ff6f91, 0 0 60px #ff2d55, 0 0 90px #ff6f91;
+    box-shadow:0 0 20px #ff6f91, 0 0 40px #ff2d55, 0 0 60px #ff6f91;
 }
 .song p{
     margin-top:8px;
@@ -101,6 +87,13 @@ button#nextBtn{
     justify-content:center;
     gap:10px;
     flex-wrap:wrap;
+    opacity:0;
+    transform: translateY(50px);
+    transition: all 1s ease;
+}
+.counter-box.show{
+    opacity:1;
+    transform: translateY(0);
 }
 .counter-box div{
     background:#222;
@@ -124,7 +117,18 @@ button#nextBtn{
 .counter-text{
     margin-top:15px;
     font-size:16px;
-    text-shadow: 0 0 1px #ff7aa0, 0 0 2px #ff4f8f;
+    color:#ff6f91;
+    opacity:0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+}
+.counter-text.glow{
+    text-shadow: 0 0 3px #ff6f91, 0 0 6px #ff2d55, 0 0 10px #ff6f91;
+}
+@keyframes glow{
+    0%{box-shadow: 0 0 5px #ff2d55;}
+    50%{box-shadow: 0 0 15px #ff6f91;}
+    100%{box-shadow: 0 0 5px #ff2d55;}
 }
 
 /* خلفية متدرجة */
@@ -151,7 +155,7 @@ button#nextBtn{
     width:100%;
     border-radius:20px;
     padding:25px 20px 30px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
     animation: fadeUp 1.2s ease;
 }
 
@@ -161,10 +165,10 @@ button#nextBtn{
     text-align: right;
     font-size:17px;
     line-height:1.9;
-    color:#ff3f7f;
-    text-shadow: 0 0 1px #ff7aa0, 0 0 2px #ff4f8f;
+    color:#ff69b4;
     white-space: pre-line;
     font-family: "Arial", "Tahoma", sans-serif;
+    text-shadow: 0 0 3px #ffb6c1;
 }
 
 /* قلب */
@@ -176,7 +180,19 @@ button#nextBtn{
     text-align:center;
 }
 
-/* أنيميشن */
+/* قلوب متساقطة */
+.falling-heart{
+    position:absolute;
+    font-size:20px;
+    color:#ff6f91;
+    animation: fall 4s linear infinite;
+    opacity:0.8;
+}
+@keyframes fall{
+    0%{transform: translateY(-50px);}
+    100%{transform: translateY(100vh);}
+}
+
 @keyframes fadeUp{
     from{opacity:0; transform:translateY(30px);}
     to{opacity:1; transform:translateY(0);}
@@ -184,12 +200,6 @@ button#nextBtn{
 @keyframes pulseHeart{
     from{transform:scale(1);}
     to{transform:scale(1.2);}
-}
-
-@keyframes glow{
-    0%{box-shadow: 0 0 5px #ff2d55;}
-    50%{box-shadow: 0 0 20px #ff6f91;}
-    100%{box-shadow: 0 0 5px #ff2d55;}
 }
 
 @media screen and (max-width:600px){
@@ -203,7 +213,10 @@ button#nextBtn{
 </head>
 <body>
 
-<!-- صفحة الباسورد -->
+<!-- قلوب متساقطة -->
+<div id="hearts"></div>
+
+<!-- 1 صفحة الباسورد -->
 <div id="password" class="page">
     <h1>🔒 ادخل الباسورد</h1>
     <input type="password" id="pass">
@@ -211,34 +224,34 @@ button#nextBtn{
     <button onclick="checkPass()">دخول</button>
 </div>
 
-<!-- صفحة بحبك -->
+<!-- 2 صفحة بحبك -->
 <div id="love" class="page">
     <h1>❤️ بحبك ❤️</h1>
     <button onclick="goTo('music')">التالي</button>
 </div>
 
-<!-- صفحة الموسيقى + العداد -->
+<!-- 3 صفحة الموسيقى + العداد -->
 <div id="music" class="page music-background">
     <h1>🎵 اختار أغنية</h1>
-
     <div class="music-container">
         <div class="song" data-color="#331133" onclick="playSong(this,'songs/song1.mp3')">
-            <img src="images/img1.jpg" alt="الأغنية الأولى">
+            <img src="images/img1.jpg">
             <p>الأغنية الأولى</p>
         </div>
         <div class="song" data-color="#113355" onclick="playSong(this,'songs/song2.mp3')">
-            <img src="images/img2.jpg" alt="الأغنية الثانية">
+            <img src="images/img2.jpg">
             <p>الأغنية الثانية</p>
         </div>
         <div class="song" data-color="#553311" onclick="playSong(this,'songs/song3.mp3')">
-            <img src="images/img3.jpg" alt="الأغنية الثالثة">
+            <img src="images/img3.jpg">
             <p>الأغنية الثالثة</p>
         </div>
     </div>
-
     <br>
     <audio id="player" controls></audio>
+    <audio id="clickSound" src="songs/song1.mp3"></audio>
 
+    <!-- العداد الرومانسي -->
     <div class="counter-box">
         <div>
             <span id="days">0</span>
@@ -262,7 +275,7 @@ button#nextBtn{
     <button id="nextBtn" onclick="goTo('next')">التالي</button>
 </div>
 
-<!-- صفحة الرسالة -->
+<!-- 4 صفحة الرسالة -->
 <div id="next" class="page message-page">
   <div class="message-card">
     <div id="typedText" class="message-text"></div>
@@ -275,38 +288,28 @@ button#nextBtn{
 let correctPass = "882010";
 let lastSong = "";
 
-// إضافة القلوب على كل الصفحات عدا صفحة الباسورد
-function createHearts(){
-    const pages = ['love','music','next'];
-    const colors = ['#ff4f91','#ff77aa','#ff3f7f','#ff6699','#ff88bb'];
-    pages.forEach(pageId => {
-        const page = document.getElementById(pageId);
-        for(let i=0;i<20;i++){ // 20 قلب لكل صفحة
-            const heart = document.createElement('div');
-            heart.className='heart-fall';
-            heart.style.left=Math.random()*90+'vw';
-            heart.style.animationDuration=(5+Math.random()*5)+'s';
-            heart.style.fontSize=(15+Math.random()*20)+'px';
-            heart.style.color=colors[Math.floor(Math.random()*colors.length)];
-            heart.innerHTML='❤';
-            page.appendChild(heart);
-        }
-    });
-}
-
-createHearts();
-
 function show(id){
     document.querySelectorAll('.page').forEach(p=>p.style.display="none");
     let page = document.getElementById(id);
     page.style.display = "block";
 
+    if(id === "music"){
+        let songs = document.querySelectorAll(".song");
+        songs.forEach((s,i)=>{
+            setTimeout(()=>{
+                s.style.opacity="1";
+                s.style.transform="translateY(0)";
+            }, i*300);
+        });
+        setTimeout(()=>{
+            document.querySelector(".counter-box").classList.add("show");
+            document.querySelector(".counter-text").classList.add("show","glow");
+        }, songs.length*300 + 100);
+    }
+
     if(id === "next"){
-        let bg = document.getElementById("bgMusic");
-        bg.pause();
-        bg.currentTime = 0;
-        bg.src = lastSong;
-        bg.play();
+        document.getElementById("bgMusic").src = lastSong;
+        document.getElementById("bgMusic").play();
         setTimeout(typeWriter, 500);
         animateBackground();
     }
@@ -321,19 +324,12 @@ function checkPass(){
 }
 
 function goTo(id){
-    if(id === "next"){
-        let player = document.getElementById("player");
-        player.pause();
-        player.currentTime = 0;
-    }
     show(id);
 }
 
 function playSong(element, src){
     let player = document.getElementById("player");
-    player.pause();
-    player.currentTime = 0;
-    document.querySelectorAll(".song").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".song").forEach(s=>s.classList.remove("active"));
     element.classList.add("active");
     document.body.style.background = element.getAttribute("data-color");
     player.src = src;
@@ -406,8 +402,20 @@ function animateBackground(){
     requestAnimationFrame(animateBackground);
 }
 
+// قلوب متساقطة
+function createHearts(){
+    const heartsContainer = document.getElementById("hearts");
+    for(let i=0;i<20;i++){
+        const heart = document.createElement("div");
+        heart.classList.add("falling-heart");
+        heart.style.left = Math.random()*100 + "vw";
+        heart.style.animationDelay = (Math.random()*5) + "s";
+        heartsContainer.appendChild(heart);
+    }
+}
+createHearts();
+
 show("password");
 </script>
-
 </body>
 </html>
